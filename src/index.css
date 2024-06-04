@@ -1,0 +1,43 @@
+@tailwind utilities;
+
+* {
+  scroll-behavior: smooth;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+}
+
+li {
+  list-style: none;
+}
+
+:root {
+  color: #cecece;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* scroll bar */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #0000006a;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
