@@ -1,4 +1,5 @@
-"use strict";
+import { ThemeOptions } from "@mui/material/styles";
+("use strict");
 
 export const cssColor = {
   white: "#cecece",
@@ -16,8 +17,7 @@ export const cssColor = {
   gray: "#6b6b6b95",
 };
 
-/** @type {import("@mui/material/styles").ThemeOptions} */
-export const darkThemeColor = {
+export const darkThemeColor: ThemeOptions = {
   palette: {
     mode: "dark",
     primary: {
