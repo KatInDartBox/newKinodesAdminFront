@@ -3,57 +3,47 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import Paper from "@mui/material/Paper";
-import Tooltip from "@mui/material/Tooltip";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import useWindowSize from "../utils/hooks/useWindowSize";
+import { Link } from "wouter";
 
-type tIcon = {
-  Icon: React.ReactElement;
+export type tSideBarIcon = {
+  Icon: React.ReactNode;
   txt: string;
   path: string;
 };
 type tProps = {
-  icons: tIcon[];
-  isExpanse: boolean;
+  icons: tSideBarIcon[];
   style?: React.CSSProperties;
   className?: string;
-  onExpanse: (open: boolean) => void;
+  basePath: string;
 };
 export default function SideBar({
   style = {},
   icons,
-  isExpanse = false,
   className = "",
-  onExpanse,
+  basePath,
 }: tProps) {
-  // const [width, setWidth] = useState<{ min: string; max: string }>({
-  //   min: "0px",
-  //   max: "58px",
-  // });
-  const width = {
-    min: "0px",
-    max: "58px",
+  const url = new URL(window.location.href);
+
+  const isActive = (iconPath: string) => {
+    const rIconPath = basePath + iconPath;
+    if (rIconPath === url.pathname) return "text-me-gold";
+    return "";
   };
-  const [transition, setTransition] = useState("0ms");
-
-  const windowSize = useWindowSize();
-  const isMobile = windowSize.width < 620;
-
-  const handleToggleExpanse = () => {
-    setTransition("200ms");
-    onExpanse(isExpanse);
+  const [expanse, setExpanse] = useState(true);
+  const handleExpanse = () => {
+    setExpanse((pre) => !pre);
   };
-
   return (
     <Paper
       square
       style={{
-        width: isExpanse ? width?.max : width?.min,
-        transition: transition,
+        width: expanse ? "58px" : "0px",
+        height: "100vh",
+        transition: "300ms",
         ...style,
       }}
-      className={"relative h-body shadow-right  " + className}
+      className={"relative  shadow-right  " + className}
     >
       <List className="h-full w-full overflow-x-hidden flex flex-col items-start">
         {icons.map((icon) => (
@@ -64,15 +54,19 @@ export default function SideBar({
             }}
             key={icon.path}
           >
-            <Link className="text-me-white w-full h-full" to={icon.path}>
+            <Link
+              className={`${isActive(icon.path)} w-full h-full`}
+              to={icon.path}
+            >
               <ListItemButton className={` flex   items-start`}>
                 <div
                   style={{
                     marginRight: "0px",
                     width: "24px",
-                    height: isExpanse ? "24px" : "32px",
                   }}
-                  className="flex flex-col items-center "
+                  className={
+                    "flex flex-col items-center " //
+                  }
                 >
                   <div
                     style={{
@@ -86,50 +80,29 @@ export default function SideBar({
                   <p
                     style={{
                       fontSize: "9px",
-                      visibility: isMobile
-                        ? "visible"
-                        : isExpanse
-                          ? "hidden"
-                          : "visible",
                     }}
                   >
                     {icon.txt}
                   </p>
                 </div>
-
-                <p
-                  style={{
-                    fontSize: "16px",
-                    visibility: isMobile
-                      ? "hidden"
-                      : isExpanse
-                        ? "visible"
-                        : "hidden",
-                  }}
-                >
-                  {icon.txt}
-                </p>
               </ListItemButton>
             </Link>
           </ListItem>
         ))}
       </List>
 
+      {/* handle */}
       <div
         style={{
           right: 0,
           top: "50%",
-          transform: `translateX(100%) rotate(${isExpanse ? 180 : 0}deg)`,
+          transform: `translateX(100%) rotate(${expanse ? 180 : 0}deg)`,
           transition: "300ms",
         }}
         className="absolute cursor-pointer flex items-center justify-center"
-        onClick={handleToggleExpanse}
+        onClick={handleExpanse}
       >
-        <Tooltip title={isExpanse ? "close" : "open"} placement="right">
-          <div className="flex items-center justify-center">
-            <IconRight fontSize="medium" />
-          </div>
-        </Tooltip>
+        <IconRight />
       </div>
     </Paper>
   );
