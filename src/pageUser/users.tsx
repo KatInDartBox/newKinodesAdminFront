@@ -9,10 +9,9 @@ export default function Users() {
   const url = new URL("http://abc.com/user?" + query);
   const params = url.searchParams;
   const uid = params.get("id");
-  const { id, name, role } = storeUser();
+  const { getUser } = storeUser();
 
   useEffect(() => {
-    if (!uid) return;
     if (!!uid) {
       const sUser = {
         id: params.get("id") || "",
@@ -30,9 +29,9 @@ export default function Users() {
 
   return (
     <Wrapper>
-      <div>id: {id} </div>
-      <div>name: {name} </div>
-      <div>role: {role} </div>
+      <div>
+        <pre>{JSON.stringify(getUser(), null, 2)}</pre>
+      </div>
       <div className="my-3"></div>
       <Button
         onClick={handleLogout}
