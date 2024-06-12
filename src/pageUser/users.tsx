@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { truncate } from "lodash";
 import { useEffect } from "react";
 import { useSearch } from "wouter";
 import Wrapper from "../components/wrapper";
@@ -10,6 +11,8 @@ export default function Users() {
   const params = url.searchParams;
   const uid = params.get("id");
   const { getUser } = storeUser();
+  const userInfo = getUser();
+  userInfo.csrf = truncate(userInfo.csrf, { length: 15 });
 
   useEffect(() => {
     if (!!uid) {
@@ -30,7 +33,7 @@ export default function Users() {
   return (
     <Wrapper>
       <div>
-        <pre>{JSON.stringify(getUser(), null, 2)}</pre>
+        <pre>{JSON.stringify(userInfo, null, 2)}</pre>
       </div>
       <div className="my-3"></div>
       <Button
