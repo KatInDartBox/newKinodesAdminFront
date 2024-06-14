@@ -1,6 +1,6 @@
 import { Route, Switch } from "wouter";
-import Ads from "./ads/ads";
-import Errors from "./errors";
+import Ads from "./ads/lists";
+import Errors from "./errors/lists";
 import Layout from "./layout";
 import Users from "./users";
 

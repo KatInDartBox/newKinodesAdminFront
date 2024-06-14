@@ -16,6 +16,7 @@ export const zusThunk = <R, A extends any[]>(
       }
       return itm;
     } catch (error) {
+      console.log("error zusthunk: ", error);
       const loadings = getLoading(loading);
       for (let loading of loadings) {
         set({ [loading]: false });

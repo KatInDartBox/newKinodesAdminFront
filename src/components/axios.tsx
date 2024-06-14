@@ -86,7 +86,7 @@ export default function AxiosHandler() {
       open={snack.open}
       onClose={() => setSnack(defaultSnack)}
       message={snack.message}
-      className={snack.isError ? "bg-me-red" : ""}
+      className={snack.isError ? "!bg-me-red" : ""}
     />
   );
 }

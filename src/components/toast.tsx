@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Slide, { SlideProps } from "@mui/material/Slide";
 import Snackbar from "@mui/material/Snackbar";
+import { useId } from "react";
 
 function Transition(props: SlideProps) {
   return <Slide {...props} direction="up" />;
@@ -25,6 +26,7 @@ export function Prompt({
   message,
   Action,
 }: tProps) {
+  const id = useId();
   return (
     <Snackbar
       className="w-full"
@@ -34,11 +36,11 @@ export function Prompt({
       onClose={onClose}
       message="i love you"
       TransitionComponent={Transition}
-      key={123456789}
+      key={id}
     >
       <Paper
         className={`flex items-center justify-between py-2 px-4 sm:w-1/2  w-3/4 ${
-          className || "bg-me-green"
+          className || "!bg-me-green"
         }`}
       >
         <div className="px-1">{message}</div>

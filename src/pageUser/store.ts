@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import CONFIG from "../config";
+import { getDefaultDate } from "../utils/date/getDefault";
 import { axClient, tRes } from "../utils/req/axiosClient";
 import { zusThunk } from "../utils/zustand/zusthunk";
 
@@ -38,8 +39,12 @@ export const storeUser = create(
         };
       },
       setCsrf: zusThunk(set, async () => {
-        const { csrf, csrfLife } = get();
-        if (!csrf || csrfLife.getTime() < new Date().getTime()) {
+        let { csrf, csrfLife } = get();
+        csrfLife = getDefaultDate(csrfLife);
+
+        const isExpired = csrfLife.getTime() < new Date().getTime();
+        // console.log({ csrf, isExpired });
+        if (!csrf || isExpired) {
           const req = await axClient.get(CONFIG.apiUserCsrf);
           const data = req.data as tRes<{ token: string }>;
           const csrf = data.body.token;
@@ -67,8 +72,9 @@ export function useInitUser() {
   const { csrf, loading, setCsrf } = storeUser.getState();
 
   useEffect(() => {
-    setCsrf();
-  }, []);
+    console.log("init user effect");
+    if (!csrf) setCsrf();
+  }, [csrf]);
 
   return {
     csrf,

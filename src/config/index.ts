@@ -9,5 +9,18 @@ const CONFIG = {
   apiGoogleCallback: serverPath + "/auth/callback/google",
   apiUserCsrf: serverPath + "/csrf",
   csrfLifeInHour: 1,
+  dirtyTxt: `.#,'"@%&`,
+  ...apiAds(),
 };
 export default CONFIG;
+
+function apiAds() {
+  return {
+    apiAds: {
+      get: serverPath + "/ads/get",
+      update: serverPath + "/ads/update",
+      remove: serverPath + "/ads/remove",
+      add: serverPath + "/ads/add",
+    },
+  };
+}
