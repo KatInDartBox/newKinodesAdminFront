@@ -11,6 +11,7 @@ const CONFIG = {
   csrfLifeInHour: 1,
   dirtyTxt: `.#,'"@%&`,
   ...apiAds(),
+  ...apiErr(),
 };
 export default CONFIG;
 
@@ -21,6 +22,14 @@ function apiAds() {
       update: serverPath + "/ads/update",
       remove: serverPath + "/ads/remove",
       add: serverPath + "/ads/add",
+    },
+  };
+}
+function apiErr() {
+  return {
+    apiAdmErr: {
+      get: serverPath + "/err/get",
+      flush: serverPath + "/err/flush",
     },
   };
 }

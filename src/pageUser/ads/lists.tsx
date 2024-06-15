@@ -1,3 +1,4 @@
+import DateCol from "@/src/components/dateCol";
 import Modal from "@/src/components/modal";
 import ModalConfirmByClick from "@/src/components/modalConfirmByClick";
 import Search from "@/src/components/search";
@@ -70,23 +71,6 @@ export default function Ads() {
             setSearch("");
           }}
         />
-        {/* <Input */}
-        {/*   onKeyDown={(e) => { */}
-        {/*     // console.log({ key: e.key, search }); */}
-        {/*     handleFilter(e.key); */}
-        {/*   }} */}
-        {/*   onChange={(e) => handleSearchChange(e.target.value)} */}
-        {/*   value={search} */}
-        {/*   style={{ */}
-        {/*     maxWidth: "450px", */}
-        {/*   }} */}
-        {/*   className="w-full" */}
-        {/*   inputProps={{ */}
-        {/*     className: "!px-2 ", */}
-        {/*   }} */}
-        {/*   placeholder="search" */}
-        {/*   color="info" */}
-        {/* /> */}
         <IconButton onClick={() => handleOpenAdd()}>
           <AddIcon />
         </IconButton>
@@ -96,43 +80,48 @@ export default function Ads() {
         <div>loading...</div>
       ) : (
         <ul>
-          <li>
-            {getFilter().map((ad) => (
-              <div
-                style={{
-                  borderBottom: "1px solid grey",
-                }}
-                key={ad.id}
-                className="px-3 flex justify-between items-center w-full hover:bg-me-gray"
-                onClick={() => {
-                  handleOpenAdd(ad);
-                }}
-              >
-                <h2 className="text-base">{ad.title}</h2>
-                <div className="flex items-center">
-                  <IconButton
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setCurrent(ad);
-                      setOpen({ ...defaultOpen, del: true });
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton
-                    size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleOpenAdd(ad);
-                    }}
-                  >
-                    <EditNoteIcon />
-                  </IconButton>
+          {getFilter().map((ad) => (
+            <li
+              style={{
+                borderBottom: "1px solid grey",
+              }}
+              key={ad.id}
+              className="px-3 py-2 flex justify-between items-center w-full hover:bg-me-gray"
+              onClick={() => {
+                handleOpenAdd(ad);
+              }}
+            >
+              <div className="flex">
+                <DateCol className="mr-2" date={ad.updated_at} />
+                <div className="flex flex-col">
+                  <h2 className="text-base">{ad.title}</h2>
+                  <p className="text-xs">{ad.desc}</p>
+                  <p className="text-xss">{ad.id}</p>
                 </div>
               </div>
-            ))}
-          </li>
+              <div className="flex items-center">
+                <IconButton
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrent(ad);
+                    setOpen({ ...defaultOpen, del: true });
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleOpenAdd(ad);
+                  }}
+                >
+                  <EditNoteIcon />
+                </IconButton>
+              </div>
+            </li>
+          ))}
         </ul>
       )}
       <Modal
