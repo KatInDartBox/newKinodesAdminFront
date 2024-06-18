@@ -1,57 +1,56 @@
 import CONFIG from "@/src/config";
+import { storeUser } from "@/src/pageUser/store";
 import { getDefaultDate } from "@/src/utils/date/getDefault";
 import { isGreater } from "@/src/utils/number/big";
 import { axClient, tRes } from "@/src/utils/req/axiosClient";
 import { zusThunk } from "@/src/utils/zustand/zusthunk";
 import { create } from "zustand";
-import { storeUser } from "../store";
 
-export type tAdmErr = {
+type tAdmHeader = {
+  Method: string[];
+  Cookie: string[];
+  Origin: string[];
+  URL: string[];
+};
+export type tAdmLog = {
   id: string;
+  attempts: number;
   ip: string;
-  msg: string;
-  risk_level: number;
-  err: string;
-  file: string;
-  line: number;
-  func: string;
-  url: string;
-  method: string;
+  header: tAdmHeader;
   updated_at: Date;
 };
 
-type tAdmErrStore = {
+type tAdmLogStore = {
   loading: boolean;
   loadingList: boolean;
-  current?: tAdmErr;
-  lists: tAdmErr[];
+  current?: tAdmLog;
+  lists: tAdmLog[];
 };
-type tAdmErrAction = {
-  setCurrent: (adm?: tAdmErr) => void;
+type tAdmLogAction = {
+  setCurrent: (adm?: tAdmLog) => void;
   setLists: (id: number) => Promise<void>;
   flush: (before: Date) => Promise<void>;
-  nextPage: () => Promise<void>;
 };
 
-export const admErrStore = create<tAdmErrStore & tAdmErrAction>((set, get) => ({
+export const visitorStore = create<tAdmLogStore & tAdmLogAction>((set, _) => ({
   loading: false,
   loadingList: false,
   current: undefined,
   lists: [],
-  setCurrent: (ads) => {
+  setCurrent: (log) => {
     set({
-      current: ads,
+      current: log,
     });
   },
   setLists: zusThunk(
     set,
     async (id) => {
       const csrf = storeUser.getState().csrf;
-      const req = await axClient.put(CONFIG.apiAdmErr.get, {
+      const req = await axClient.put(CONFIG.apiAdmLog.get, {
         id: id + "",
         csrf,
       });
-      const data = req.data as tRes<{ data: tAdmErr[] }>;
+      const data = req.data as tRes<{ data: tAdmLog[] }>;
       let errDb = data.body.data;
       errDb.sort((a, b) => (isGreater(b.id, a.id) ? 1 : -1));
 
@@ -66,35 +65,9 @@ export const admErrStore = create<tAdmErrStore & tAdmErrAction>((set, get) => ({
   ),
   flush: zusThunk(set, async (before) => {
     const csrf = storeUser.getState().csrf;
-    await axClient.put(CONFIG.apiAdmErr.flush, {
+    await axClient.put(CONFIG.apiAdmLog.flush, {
       updated_at: before,
       csrf,
     });
   }),
-  nextPage: zusThunk(
-    set,
-    async () => {
-      const pre = get().lists;
-    },
-    "loadingList",
-  ),
 }));
-
-// const ExAds: tAds[] = [
-//   {
-//     id: "1",
-//     img_url: "",
-//     href: "abc.com",
-//     title: "abc",
-//     desc: "desc",
-//     tags: "abc,efg",
-//   },
-//   {
-//     id: "2",
-//     img_url: "",
-//     href: "abc.com",
-//     title: "efg",
-//     desc: "desc",
-//     tags: "abc,efg",
-//   },
-// ];

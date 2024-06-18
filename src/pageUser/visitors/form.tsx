@@ -1,7 +1,7 @@
-import { admErrStore } from "./store";
+import { visitorStore } from "./store";
 
 export default function AdmErrForm() {
-  const { current } = admErrStore();
+  const { current } = visitorStore();
 
   // if (!current) return <>{current}</>;
 

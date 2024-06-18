@@ -1,5 +1,5 @@
 import { addHours } from "date-fns/addHours";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import CONFIG from "../config";
@@ -69,15 +69,18 @@ export function resetUserStore() {
 }
 
 export function useInitUser() {
-  const { csrf, loading, setCsrf } = storeUser.getState();
+  const [state, setState] = useState("");
+  const { csrf, setCsrf } = storeUser();
 
   useEffect(() => {
     console.log("init user effect");
-    if (!csrf) setCsrf();
+    setCsrf();
+  }, []);
+  useEffect(() => {
+    if (!!csrf) {
+      setState(csrf);
+    }
   }, [csrf]);
 
-  return {
-    csrf,
-    loading,
-  };
+  return state;
 }

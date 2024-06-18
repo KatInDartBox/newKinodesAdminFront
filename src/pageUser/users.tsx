@@ -31,19 +31,24 @@ export default function Users() {
   };
 
   return (
-    <Wrapper>
-      <div>
-        <pre>{JSON.stringify(userInfo, null, 2)}</pre>
-      </div>
-      <div className="my-3"></div>
-      <Button
-        onClick={handleLogout}
-        size="small"
-        variant="contained"
-        color="error"
-      >
-        logout
-      </Button>
-    </Wrapper>
+    <Wrapper
+      Header={<h1 className="text-lg">User</h1>}
+      Body={
+        <div className="p-4">
+          <div>
+            <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+          </div>
+          <div className="my-3"></div>
+          <Button
+            onClick={handleLogout}
+            size="small"
+            variant="contained"
+            color="error"
+          >
+            logout
+          </Button>
+        </div>
+      }
+    ></Wrapper>
   );
 }

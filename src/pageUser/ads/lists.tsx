@@ -60,70 +60,78 @@ export default function Ads() {
   useInitUser();
 
   return (
-    <Wrapper className="h-full w-full overflow-y-auto">
-      {/* header  */}
-      <div className="flex items-center justify-between px-3">
-        <h1 className="text-base">Ads</h1>
-        <Search
-          onSearch={(str) => handleFilter(str)}
-          onClear={() => {
-            // setOpen({...defaultOpen})
-            setSearch("");
-          }}
-        />
-        <IconButton onClick={() => handleOpenAdd()}>
-          <AddIcon />
-        </IconButton>
-      </div>
+    <>
+      <Wrapper
+        className="h-full w-full overflow-y-auto"
+        Header={
+          <>
+            <h1 className="text-base">Ads</h1>
+            <Search
+              onSearch={(str) => handleFilter(str)}
+              onClear={() => {
+                // setOpen({...defaultOpen})
+                setSearch("");
+              }}
+            />
+            <IconButton onClick={() => handleOpenAdd()}>
+              <AddIcon />
+            </IconButton>
+          </>
+        }
+        Body={
+          <>
+            {loadingList ? (
+              <div>loading...</div>
+            ) : (
+              <ul>
+                {getFilter().map((ad) => (
+                  <li
+                    style={{
+                      borderBottom: "1px solid grey",
+                    }}
+                    key={ad.id}
+                    className="cursor-pointer px-3 py-2 flex justify-between items-center w-full hover:bg-me-gray"
+                    onClick={() => {
+                      handleOpenAdd(ad);
+                    }}
+                  >
+                    <div className="flex">
+                      <DateCol className="mr-2" date={ad.updated_at} />
+                      <div className="flex flex-col">
+                        <h2 className="text-base">{ad.title}</h2>
+                        <p className="text-xs">{ad.desc}</p>
+                        <p className="text-xss">{ad.id}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center">
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCurrent(ad);
+                          setOpen({ ...defaultOpen, del: true });
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleOpenAdd(ad);
+                        }}
+                      >
+                        <EditNoteIcon />
+                      </IconButton>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </>
+        }
+      ></Wrapper>
 
-      {loadingList ? (
-        <div>loading...</div>
-      ) : (
-        <ul>
-          {getFilter().map((ad) => (
-            <li
-              style={{
-                borderBottom: "1px solid grey",
-              }}
-              key={ad.id}
-              className="px-3 py-2 flex justify-between items-center w-full hover:bg-me-gray"
-              onClick={() => {
-                handleOpenAdd(ad);
-              }}
-            >
-              <div className="flex">
-                <DateCol className="mr-2" date={ad.updated_at} />
-                <div className="flex flex-col">
-                  <h2 className="text-base">{ad.title}</h2>
-                  <p className="text-xs">{ad.desc}</p>
-                  <p className="text-xss">{ad.id}</p>
-                </div>
-              </div>
-              <div className="flex items-center">
-                <IconButton
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setCurrent(ad);
-                    setOpen({ ...defaultOpen, del: true });
-                  }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-                <IconButton
-                  size="small"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleOpenAdd(ad);
-                  }}
-                >
-                  <EditNoteIcon />
-                </IconButton>
-              </div>
-            </li>
-          ))}
-        </ul>
-      )}
       <Modal
         open={open.add}
         title="Add"
@@ -137,6 +145,6 @@ export default function Ads() {
         onClose={handleCloseModal}
         onConfirm={handleDelete}
       />
-    </Wrapper>
+    </>
   );
 }

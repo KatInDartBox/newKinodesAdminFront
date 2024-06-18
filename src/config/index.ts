@@ -12,6 +12,7 @@ const CONFIG = {
   dirtyTxt: `.#,'"@%&`,
   ...apiAds(),
   ...apiErr(),
+  ...apiLog(),
 };
 export default CONFIG;
 
@@ -30,6 +31,15 @@ function apiErr() {
     apiAdmErr: {
       get: serverPath + "/err/get",
       flush: serverPath + "/err/flush",
+    },
+  };
+}
+
+function apiLog() {
+  return {
+    apiAdmLog: {
+      get: serverPath + "/log/get",
+      flush: serverPath + "/log/flush",
     },
   };
 }

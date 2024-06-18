@@ -4,6 +4,7 @@ import IconHome from "@mui/icons-material/House";
 import IconUser from "@mui/icons-material/Person";
 import AxiosHandler from "../components/axios";
 import SideBar, { tSideBarIcon } from "../components/sideBar";
+import IconVisitor from '@mui/icons-material/Visibility';
 
 export const Icons: tSideBarIcon[] = [];
 
@@ -16,6 +17,7 @@ export default function Layout() {
           { txt: "user", Icon: <IconUser />, path: "/" },
           { txt: "ads", Icon: <IconAds />, path: "/ads" },
           { txt: "error", Icon: <IconBug />, path: "/error" },
+          { txt: "visitor", Icon: <IconVisitor />, path: "/visitor" },
         ]}
         basePath="/user"
       />

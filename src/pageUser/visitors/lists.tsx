@@ -1,34 +1,28 @@
 import DateCol from "@/src/components/dateCol";
 import Modal from "@/src/components/modal";
-import Pagination, { tDirection } from "@/src/components/pagination";
 import Search from "@/src/components/search";
+import Wrapper from "@/src/components/wrapper";
+import { useInitUser } from "@/src/pageUser/store";
 import IconFlush from "@mui/icons-material/EventBusy";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
-import Wrapper from "../../components/wrapper";
-import { useInitUser } from "../store";
 import { Flush } from "./flush";
 import AdmErrForm from "./form";
-import { admErrStore, tAdmErr } from "./store";
-import { filePath, pkName } from "./utils";
+import { tAdmLog, visitorStore } from "./store";
 
 const defaultOpen = {
   view: false,
   flush: false,
 };
-export default function Errors() {
+export default function Visitors() {
   const [open, setOpen] = useState(defaultOpen);
-  const { setCurrent, lists, setLists } = admErrStore();
+  const { setCurrent, lists, setLists } = visitorStore();
   const csrf = useInitUser();
-  const handleView = (admErr: tAdmErr) => {
+  const handleView = (admErr: tAdmLog) => {
     // console.log("current: ", admErr);
     setCurrent(admErr);
     setOpen({ ...defaultOpen, view: true });
     // console.log("open: ", open);
-  };
-  const [page, setPage] = useState(1);
-  const handlePageChange = (dir: tDirection) => {
-    if (dir === "down") return;
   };
 
   useEffect(() => {
@@ -43,7 +37,7 @@ export default function Errors() {
         className="h-full w-full overflow-y-auto"
         Header={
           <>
-            <h1 className="text-base">Errors</h1>
+            <h1 className="text-base">Visitors</h1>
 
             <Search
               onSearch={(str) => console.log("search: ", str)}
@@ -76,11 +70,11 @@ export default function Errors() {
                     <div className="flex items-center">
                       <DateCol className="mr-2" date={ls.updated_at} />
                       <div className="flex flex-col">
-                        <h2 className="text-base">{pkName(ls.func)}</h2>
+                        <h2 className="text-base">{ls.ip}</h2>
                         <p className="text-xs">
-                          {ls.method + " : " + filePath(ls.file)}
+                          {ls.header.Method[0] + " : " + ls.header.URL[0]}
                         </p>
-                        <p className="text-xss">{"ip: " + ls.ip}</p>
+                        <p className="text-xss">{"atm: " + ls.attempts}</p>
                         <p className="text-xss">{"id: " + ls.id}</p>
                       </div>
                     </div>
@@ -88,18 +82,6 @@ export default function Errors() {
                 ))
               )}
             </ul>
-          </>
-        }
-        Footer={
-          <>
-            <div />
-
-            <Pagination
-              no={page}
-              onPageChange={(dir) => {
-                console.log({ dir });
-              }}
-            />
           </>
         }
       ></Wrapper>
