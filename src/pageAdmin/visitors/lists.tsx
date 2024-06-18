@@ -1,8 +1,8 @@
 import DateCol from "@/src/components/dateCol";
 import Modal from "@/src/components/modal";
-import Search from "@/src/components/search";
 import Wrapper from "@/src/components/wrapper";
-import { useInitUser } from "@/src/pageUser/store";
+import { useInitUser } from "@/src/pageAdmin/store";
+import IconRight from "@mui/icons-material/ChevronRight";
 import IconFlush from "@mui/icons-material/EventBusy";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
@@ -24,10 +24,13 @@ export default function Visitors() {
     setOpen({ ...defaultOpen, view: true });
     // console.log("open: ", open);
   };
+  const handlePageChange = async () => {
+    await setLists();
+  };
 
   useEffect(() => {
     if (!!csrf) {
-      setLists(0);
+      setLists();
     }
   }, [csrf]);
 
@@ -39,12 +42,7 @@ export default function Visitors() {
           <>
             <h1 className="text-base">Visitors</h1>
 
-            <Search
-              onSearch={(str) => console.log("search: ", str)}
-              onClear={() => {
-                console.log("clear: ");
-              }}
-            />
+            <div />
             <IconButton
               onClick={() => setOpen({ ...defaultOpen, flush: true })}
             >
@@ -84,19 +82,27 @@ export default function Visitors() {
             </ul>
           </>
         }
+        Footer={
+          <>
+            <div />
+            <IconButton onClick={handlePageChange} size="small">
+              <IconRight />
+            </IconButton>
+          </>
+        }
       ></Wrapper>
 
       <Modal
         open={open.flush}
         onClose={() => setOpen({ ...defaultOpen })}
-        title="Flush Error"
+        title="Flush Logs"
         width="sm"
         Content={<Flush onClose={() => setOpen({ ...defaultOpen })} />}
       />
       <Modal
         open={open.view}
         onClose={() => setOpen({ ...defaultOpen })}
-        title="Error"
+        title="Logs"
         width="xl"
         Content={<AdmErrForm />}
       />

@@ -1,13 +1,13 @@
 import LoginGoogle from "@/src/components/loginGoogle";
 import { useEffect } from "react";
 import { navigate } from "wouter/use-browser-location";
-import { storeUser } from "../pageUser/store";
+import { storeUser } from "../pageAdmin/store";
 
 export default function PageHome() {
   const { id } = storeUser();
   useEffect(() => {
     if (!!id) {
-      navigate("/user/");
+      navigate("/admin/");
     }
   }, []);
   return (

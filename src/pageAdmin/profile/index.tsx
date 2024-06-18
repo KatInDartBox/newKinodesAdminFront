@@ -2,10 +2,10 @@ import { Button } from "@mui/material";
 import { truncate } from "lodash";
 import { useEffect } from "react";
 import { useSearch } from "wouter";
-import Wrapper from "../components/wrapper";
-import { resetUserStore, storeUser } from "./store";
+import Wrapper from "../../components/wrapper";
+import { resetUserStore, storeUser } from "../store";
 
-export default function Users() {
+export default function Profile() {
   const query = useSearch();
   const url = new URL("http://abc.com/user?" + query);
   const params = url.searchParams;

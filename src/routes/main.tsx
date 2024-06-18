@@ -1,7 +1,6 @@
 import { Route, Switch } from "wouter";
-import NotFound from "../PageError/notFound";
 import PageHome from "../pageHome";
-import PageUser from "../pageUser";
+import PageUser from "../pageAdmin";
 
 export default function MainRoute() {
   return (
@@ -9,8 +8,8 @@ export default function MainRoute() {
       <main>
         <Switch>
           <Route path="/" component={PageHome} />
-          <Route path="/user" nest component={PageUser} />
-          <Route component={NotFound} />
+          <Route path="/admin" nest component={PageUser} />
+          <Route>404: page not found</Route>
         </Switch>
       </main>
     </>

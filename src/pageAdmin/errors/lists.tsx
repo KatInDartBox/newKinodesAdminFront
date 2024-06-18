@@ -1,7 +1,6 @@
 import DateCol from "@/src/components/dateCol";
 import Modal from "@/src/components/modal";
-import Pagination, { tDirection } from "@/src/components/pagination";
-import Search from "@/src/components/search";
+import IconRight from "@mui/icons-material/ChevronRight";
 import IconFlush from "@mui/icons-material/EventBusy";
 import IconButton from "@mui/material/IconButton";
 import { useEffect, useState } from "react";
@@ -26,14 +25,13 @@ export default function Errors() {
     setOpen({ ...defaultOpen, view: true });
     // console.log("open: ", open);
   };
-  const [page, setPage] = useState(1);
-  const handlePageChange = (dir: tDirection) => {
-    if (dir === "down") return;
+  const handlePageChange = async () => {
+    await setLists();
   };
 
   useEffect(() => {
     if (!!csrf) {
-      setLists(0);
+      setLists();
     }
   }, [csrf]);
 
@@ -45,12 +43,7 @@ export default function Errors() {
           <>
             <h1 className="text-base">Errors</h1>
 
-            <Search
-              onSearch={(str) => console.log("search: ", str)}
-              onClear={() => {
-                console.log("clear: ");
-              }}
-            />
+            <div />
             <IconButton
               onClick={() => setOpen({ ...defaultOpen, flush: true })}
             >
@@ -93,13 +86,9 @@ export default function Errors() {
         Footer={
           <>
             <div />
-
-            <Pagination
-              no={page}
-              onPageChange={(dir) => {
-                console.log({ dir });
-              }}
-            />
+            <IconButton onClick={handlePageChange} size="small">
+              <IconRight />
+            </IconButton>
           </>
         }
       ></Wrapper>
