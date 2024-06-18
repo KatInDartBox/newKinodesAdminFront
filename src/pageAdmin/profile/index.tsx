@@ -32,7 +32,7 @@ export default function Profile() {
 
   return (
     <Wrapper
-      Header={<h1 className="text-lg">User</h1>}
+      Header={<h1 className="text-lg">Profile</h1>}
       Body={
         <div className="p-4">
           <div>
