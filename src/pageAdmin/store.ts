@@ -15,10 +15,13 @@ export type tUser = {
   id: string;
   csrf: string;
   csrfLife: Date;
+  updated_at: Date;
 };
 type tAction = {
   getUser: () => tUser;
   setCsrf: () => Promise<void>;
+  setProfile: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 const defaultUser: tUser = {
   loading: false,
@@ -28,6 +31,7 @@ const defaultUser: tUser = {
   id: "",
   csrf: "",
   csrfLife: new Date(-1),
+  updated_at: new Date(-1),
 };
 export const storeUser = create(
   persist<tUser & tAction>(
@@ -54,6 +58,26 @@ export const storeUser = create(
             csrfLife: life,
           });
         }
+      }),
+      setProfile: zusThunk(set, async () => {
+        const req = await axClient.get(CONFIG.apiProfile.get);
+        const data = req.data as tRes<{ user: tUser; csrf: string }>;
+        const csrf = data.body.csrf;
+        const user = data.body.user;
+        set({
+          id: user.id,
+          name: user.name,
+          csrf,
+          csrfLife: addHours(new Date(), CONFIG.csrfLifeInHour),
+          role: user.role,
+          updated_at: new Date(user.updated_at),
+        });
+      }),
+      logout: zusThunk(set, async () => {
+        await axClient.get(CONFIG.apiProfile.logout);
+        set({
+          ...defaultUser,
+        });
       }),
     }),
     {

@@ -1,32 +1,27 @@
 import { Button } from "@mui/material";
 import { truncate } from "lodash";
 import { useEffect } from "react";
-import { useSearch } from "wouter";
 import Wrapper from "../../components/wrapper";
-import { resetUserStore, storeUser } from "../store";
+import { storeUser } from "../store";
 
 export default function Profile() {
-  const query = useSearch();
-  const url = new URL("http://abc.com/user?" + query);
-  const params = url.searchParams;
-  const uid = params.get("id");
-  const { getUser } = storeUser();
+  // const query = useSearch();
+  // const url = new URL("http://abc.com/user?" + query);
+  // const params = url.searchParams;
+  // const uid = params.get("id");
+  const { logout, getUser, setProfile, id, loading } = storeUser();
   const userInfo = getUser();
   userInfo.csrf = truncate(userInfo.csrf, { length: 15 });
 
   useEffect(() => {
-    if (!!uid) {
-      const sUser = {
-        id: params.get("id") || "",
-        name: params.get("name") || "",
-        role: params.get("role") || "",
-      };
-      storeUser.setState({ ...sUser });
+    if (!id) {
+      setProfile();
     }
-  }, [query]);
+  }, [id]);
 
-  const handleLogout = () => {
-    resetUserStore();
+  const handleLogout = async () => {
+    await logout();
+    // resetUserStore();
     window.location.replace("/");
   };
 
@@ -36,7 +31,11 @@ export default function Profile() {
       Body={
         <div className="p-4">
           <div>
-            <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+            {loading ? (
+              <div>loading</div>
+            ) : (
+              <pre>{JSON.stringify(userInfo, null, 2)}</pre>
+            )}
           </div>
           <div className="my-3"></div>
           <Button

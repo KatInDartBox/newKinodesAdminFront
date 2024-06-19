@@ -19,8 +19,18 @@ const CONFIG = {
   ...apiLog(),
   ...apiCounter(),
   ...apiAdmUser(),
+  ...apiProfile(),
 };
 export default CONFIG;
+
+function apiProfile() {
+  return {
+    apiProfile: {
+      get: serverPath + "/profile/get",
+      logout: serverPath + "/profile/logout",
+    },
+  };
+}
 
 function apiAdmUser() {
   return {
